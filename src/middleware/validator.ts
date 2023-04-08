@@ -16,7 +16,7 @@ export default function validate(validations: ValidationChain[]) {
       return
     }
 
-    res.status(422).json({ msg: errors.array().join('; ') })
+    res.status(422).json({ error: errors.array().join('; ') })
   }
 }
 

@@ -1,5 +1,6 @@
 import ArticleModel, { type ArticleDocument } from '../models/article'
-import { type ArticleSortDirection, type ArticleSortType } from '../utils/enums'
+import { type ArticleSortDirection, type ArticleSortType } from '../utils/types'
+import { parseQueryCode } from '../utils/utils'
 
 export async function getRandom(num: number = 1): Promise<ArticleDocument[]> {
   const articles = await ArticleModel.aggregate([{ $sample: { size: num } }])
@@ -27,7 +28,7 @@ export async function createOne(text: string, uploader: string): Promise<Article
 }
 
 export async function query(
-  kw: string,
+  q: string,
   pp: number,
   pn: number,
   sort: ArticleSortType,
@@ -35,8 +36,12 @@ export async function query(
 ): Promise<{ data: ArticleDocument[], total: number }> {
   const skip = pp * (pn - 1)
 
+  const parsedQuery = parseQueryCode(q)
+
+  console.log(parsedQuery)
+
   const { data, count } = (await ArticleModel.aggregate([
-    { $match: { text: RegExp(kw) } },
+    { $match: parsedQuery },
     { $sort: { [sort]: direction } },
     {
       $facet: {
@@ -46,7 +51,7 @@ export async function query(
     }
   ]))[0]
 
-  return { data, total: count[0].total }
+  return { data, total: count[0] === undefined ? 0 : count[0].total }
 }
 
 export async function increaseLikes(id: string, inc: number): Promise<void> {

@@ -1,6 +1,6 @@
 import { type Response, type Request } from 'express'
 import { type ArticleDocument, type ArticleBase } from '../models/article'
-import { type ArticleSortDirection, ArticleSortType } from '../utils/enums'
+import { type ArticleSortDirection, ArticleSortType } from '../utils/types'
 import * as articleService from '../service/article'
 import * as likeService from '../service/like'
 import logger from '../utils/logger'
@@ -26,7 +26,7 @@ function getIpFromReq(req: Request<unknown, unknown, unknown>): string {
 }
 
 interface GetArticleReqQuery {
-  kw: string
+  q: string
   pp: number
   pn: number
   sort: ArticleSortType
@@ -35,7 +35,7 @@ interface GetArticleReqQuery {
 
 export async function getArticlesHandler(req: Request, res: Response): Promise<void> {
   const query = req.query as unknown
-  const { kw, pp, pn, sort, direction } = query as GetArticleReqQuery
+  const { q, pp, pn, sort, direction } = query as GetArticleReqQuery
 
   try {
     let data: ArticleDocument[] = []
@@ -43,7 +43,7 @@ export async function getArticlesHandler(req: Request, res: Response): Promise<v
     if (sort === ArticleSortType.RANDOM) {
       data = await articleService.getRandom(pp)
     } else {
-      ({ data, total } = await articleService.query(kw, pp, pn, sort, direction))
+      ({ data, total } = await articleService.query(q, pp, pn, sort, direction))
     }
 
     const articles = data.map(convertArticle)
@@ -63,7 +63,7 @@ export async function getArticleByIdHandler(req: Request, res: Response): Promis
     if (article === null) throw new Error()
     else res.json(convertArticle(article))
   } catch (error) {
-    res.status(404).json({ error: 'NO corresponding article' })
+    res.status(404).json({ error: 'Article Not Found.' })
   }
 }
 

@@ -11,3 +11,8 @@ export enum ArticleSortDirection {
   ASC = 1, // 升序
   DESC = -1, // 倒序
 }
+
+export interface IParsedQueryCode {
+  text?: string | RegExp
+  uploader?: string
+}

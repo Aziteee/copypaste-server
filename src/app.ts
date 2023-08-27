@@ -18,6 +18,6 @@ app.get('/api/articles/:id/liked', validate(validators.getIdParamValidator()), a
 app.put('/api/articles/:id/liked', validate(validators.getIdParamValidator()), articleController.likeArticleHandler)
 app.delete('/api/articles/:id/liked', validate(validators.getIdParamValidator()), articleController.unlikeArticleHandler)
 
-app.post('/api/articles', validate(validators.getCreateArticleValidator()), articleController.createArticleHandler)
+app.post('/api/articles', validate(validators.getCreateArticleValidator()))
 
 export default app

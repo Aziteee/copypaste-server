@@ -4,9 +4,9 @@
 GET {{endpoint}}/articles?sort=random&pp=1
 
 ### 查询语句
-GET {{endpoint}}/articles?kw=&pp=3&pn=6&sort=uploadTime&direction=1
+GET {{endpoint}}/articles?q=uploader:Azite&pn=1&sort=uploadTime&direction=1
 ### 查询错误
-GET {{endpoint}}/articles?kw=genshin&pp=100&pn=-1&sort=0
+GET {{endpoint}}/articles?q=genshin&pp=100&pn=-1&sort=0
 ###
 GET {{endpoint}}/articles?pp=10&pn=1&sort=likes&direction=-1
 
@@ -25,6 +25,6 @@ POST {{endpoint}}/articles
 Content-Type: application/json
 
 {
-    "uploader": "Azite",
-    "text": "金灿灿的玉堆成山土家阿阿妹把歌唱看着当地居民丰收时喜悦的样子，不少游客也不由自主参与到唱民歌，搓玉米，打包谷坨，扭扁担等民俗活动中。玩渴了饿了就喝一碗摔碗酒，吃几块当地腊肉，醉倒在丰收里。“有一种丰收的喜悦，喝了之后非常开心，浑身充满了力量。”"
+    "uploader": "      ",
+    "text": "                                                                                        "
 }

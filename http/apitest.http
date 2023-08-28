@@ -25,6 +25,6 @@ POST {{endpoint}}/articles
 Content-Type: application/json
 
 {
-    "uploader": "      ",
-    "text": "                                                                                        "
+    "uploader": "admin",
+    "text": " 123456                                                                  "
 }

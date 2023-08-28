@@ -3,7 +3,7 @@ import { type ValidationChain, validationResult, body, param, query, type Valida
 import * as articleService from '../service/article'
 import { ArticleSortType, ArticleSortDirection } from '../utils/types'
 
-const notEmptyValidator: CustomValidator = (value) => {
+const notEmptyValidator: CustomValidator = async (value) => {
   if (value.trim() === '') {
     throw new Error('cant be empty')
   }
@@ -56,7 +56,7 @@ export const getLikeArticleValidator = (): ValidationChain[] => [
  */
 export const getCreateArticleValidator = (): ValidationChain[] => [
   body('text')
-    .custom(notEmptyValidator)
+    .custom(notEmptyValidator).withMessage('文本不能为空')
     .isLength({ min: 30, max: 1000 }).withMessage('语句长度应在30-1000之间')
     .custom(async (value) => {
       const article = await articleService.getOneByText(value)
@@ -64,5 +64,7 @@ export const getCreateArticleValidator = (): ValidationChain[] => [
         return await Promise.reject(new Error('该语句已存在'))
       }
     }),
-  body('uploader').custom(notEmptyValidator).not().isIn(['admin']).withMessage('参数错误')
+  body('uploader')
+    .custom(notEmptyValidator).withMessage('上传者不能为空')
+    .not().isIn(['admin']).withMessage('上传者不能为admin')
 ]

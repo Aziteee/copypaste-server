@@ -24,7 +24,7 @@ API设计采用了类似GitHub的REST风格
 
 | 参数      | 类型                                       | 默认值     | 说明     |
 | --------- | ------------------------------------------ | ---------- | -------- |
-| kw        | string                                     | ""         | 关键词   |
+| kw        | string                                     | ""         | 查询语句 |
 | pp        | number                                     | 10         | 每页数量 |
 | pn        | number                                     | 1          | 页码     |
 | sort      | [ArticleSortType](src/utils/enums.ts)      | uploadTime | 排序方式 |

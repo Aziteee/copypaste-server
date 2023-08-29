@@ -1,6 +1,6 @@
 import ArticleModel, { type ArticleDocument } from '../models/article'
-import { type ArticleSortDirection, type ArticleSortType } from '../utils/types'
-import { parseQueryCode } from '../utils/utils'
+import { type IMongoCompare, type ArticleSortDirection, type ArticleSortType } from '../utils/types'
+import { parseQueryCode, parseStringToMongoCompareObj } from '../utils/utils'
 
 export async function getRandom(num: number = 1): Promise<ArticleDocument[]> {
   const articles = await ArticleModel.aggregate([{ $sample: { size: num } }])
@@ -27,6 +27,13 @@ export async function createOne(text: string, uploader: string): Promise<Article
   return article
 }
 
+interface IMatchCode {
+  text?: RegExp
+  uploader?: string
+  likes?: IMongoCompare
+  uploadTime?: IMongoCompare
+}
+
 export async function query(
   q: string,
   pp: number,
@@ -36,12 +43,28 @@ export async function query(
 ): Promise<{ data: ArticleDocument[], total: number }> {
   const skip = pp * (pn - 1)
 
-  const parsedQuery = parseQueryCode(q)
+  const matchCode: IMatchCode = {}
+  const parsed = parseQueryCode(q)
+  console.error(parsed)
+  if ('text' in parsed) {
+    matchCode.text = RegExp(parsed.text)
+  }
+  if ('uploader' in parsed) {
+    matchCode.uploader = parsed.uploader
+  }
+  if ('likes' in parsed) {
+    const likesMatchCode = parseStringToMongoCompareObj(parsed.likes)
+    if (Object.keys(likesMatchCode).length !== 0) matchCode.likes = likesMatchCode
+  }
+  if ('uploadTime' in parsed) {
+    const uploadTimeMatchCode = parseStringToMongoCompareObj(parsed.uploadTime)
+    if (Object.keys(uploadTimeMatchCode).length !== 0) matchCode.uploadTime = uploadTimeMatchCode
+  }
 
-  console.log(parsedQuery)
+  console.log(matchCode)
 
   const { data, count } = (await ArticleModel.aggregate([
-    { $match: parsedQuery },
+    { $match: matchCode },
     { $sort: { [sort]: direction } },
     {
       $facet: {

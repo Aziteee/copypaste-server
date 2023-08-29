@@ -12,7 +12,6 @@ export enum ArticleSortDirection {
   DESC = -1, // 倒序
 }
 
-export interface IParsedQueryCode {
-  text?: string | RegExp
-  uploader?: string
-}
+export type MongoCompareParameter = '$gt' | '$gte' | '$lt' | '$lte'
+
+export type IMongoCompare = Partial<Record<MongoCompareParameter, number | Date>>

@@ -4,7 +4,7 @@
 GET {{endpoint}}/articles?sort=random&pp=1
 
 ### 查询语句
-GET {{endpoint}}/articles?q=uploader:Azite&pn=1&sort=uploadTime&direction=1
+GET {{endpoint}}/articles?q=uploadTime:<2023-1-1&pn=1&sort=uploadTime&direction=1
 ### 查询错误
 GET {{endpoint}}/articles?q=genshin&pp=100&pn=-1&sort=0
 ###

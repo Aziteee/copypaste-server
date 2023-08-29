@@ -35,7 +35,7 @@ export default function validate(validations: ValidationChain[]) {
  * @param direction 排序方向
  */
 export const getArticleValidator = (): ValidationChain[] => [
-  query('q').default('').isLength({ max: 50 }),
+  query('q').default('').isLength({ max: 50 }).withMessage('查询语句过长'),
   query('pp').default(10).isInt({ gt: 0, lt: 100 }).toInt(),
   query('pn').default(1).isInt({ gt: 0 }).toInt(),
   query('sort').default(ArticleSortType.TIME).isIn(Object.values(ArticleSortType)),
